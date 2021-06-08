@@ -8,7 +8,8 @@ form.loginFormCallback = data => {
              location.reload();
          }
 
-         console.error(response.error);
+         let message = response.error;
+         form.setLoginErrorMessage(message);
      });
  }
 
@@ -18,7 +19,8 @@ form.loginFormCallback = data => {
              location.reload();
          }
 
-         console.error(response.error);
+         let message = response.error;
+         form.setRegisterErrorMessage(message)
      });
  }
 

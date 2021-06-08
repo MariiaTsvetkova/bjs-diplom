@@ -17,12 +17,15 @@ ApiConnector.current((response) => {
 
 let ratesBoard = new RatesBoard();
 
-ApiConnector.getStocks(response => {
+const refreshStocks = () => {
+    ApiConnector.getStocks(response => {
     if (response.success) {
         ratesBoard.clearTable();
         ratesBoard.fillTable(response.data);
     }
-})
+})};
+refreshStocks();
+setInterval(refreshStocks, 60000)
 
 let moneyManager = new MoneyManager();
 
@@ -32,7 +35,7 @@ moneyManager.addMoneyCallback = data => {
             ProfileWidget.showProfile(response.data);
         }
 
-        moneyManager.setMessage(response.success, response.error);
+        moneyManager.setMessage(response.success, message(response.success, response.error));
     })
 }
 
@@ -42,7 +45,7 @@ moneyManager.conversionMoneyCallback = data => {
             ProfileWidget.showProfile(response.data);
         }
 
-        moneyManager.setMessage(response.success, response.error);
+        moneyManager.setMessage(response.success, message(response.success, response.error));
     })
 }
 
@@ -52,7 +55,7 @@ moneyManager.sendMoneyCallback = data => {
             ProfileWidget.showProfile(response.data);
         }
 
-        moneyManager.setMessage(response.success, response.error);
+        moneyManager.setMessage(response.success, message(response.success, response.error));
     })
 }
 
@@ -73,7 +76,7 @@ favoritesWidget.addUserCallback = data => {
             favoritesWidget.fillTable(response.data);
             moneyManager.updateUsersList(response.data);
         }
-        favoritesWidget.setMessage(response.success, response.error);
+        favoritesWidget.setMessage(response.success, message(response.success, response.error));
     })
 }
 
@@ -84,6 +87,10 @@ favoritesWidget.removeUserCallback = data => {
             favoritesWidget.fillTable(response.data);
             moneyManager.updateUsersList(response.data);
         }
-        favoritesWidget.setMessage(response.success, response.error);
+        favoritesWidget.setMessage(response.success, message(response.success, response.error));
     })
 }
+
+let message = (success, message) => {
+    return success ? "Операция выполнена успешно" : message;
+};
